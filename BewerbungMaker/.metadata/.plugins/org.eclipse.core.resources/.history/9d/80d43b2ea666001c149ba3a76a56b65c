@@ -1,0 +1,46 @@
+package sql;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DB {
+
+	public static Connection connect() {
+
+		Connection connect = null;
+
+		try {
+
+			String path = "src/main/resources/Database/BewerbungMaker.db";
+
+			File file = new File(path);
+			String absolutePath = file.getAbsolutePath();
+			connect = DriverManager.getConnection("jdbc:sqlite:" + absolutePath);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return connect;
+
+	}
+
+	public static int sqlLogin(String username, String password) throws SQLException {
+
+		ResultSet r = null;
+		int role_id = -1;
+
+		String Query = "Select role_id from User NATURAL JOIN User_Role NATURAL Join Role where username='" + username
+				+ "' AND password='" + password + "';";
+		Statement s = null;
+		s = AppWithDB.connect().createStatement();
+		r = s.executeQuery(Query);
+		while (r.next()) {
+			role_id = r.getInt("role_id");
+		}
+		r.close();
+		s.close();
+		return role_id;
+	}
+
+}
