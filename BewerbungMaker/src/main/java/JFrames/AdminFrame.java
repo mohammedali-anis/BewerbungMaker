@@ -76,7 +76,7 @@ public class AdminFrame extends JFrame {
 		 * 
 		 */
 		DefaultTableModel tableModel = new DefaultTableModel(
-				new String[] { "Bewerbung ID", "Name", "Sex", "First Name", "Last Name", "E-Mail", "Mobile", "Tel.", "Street", "No.", "PLZ", "City", "Date" }, 0);
+				new String[] { "Bewerbung ID", "Name", "Postion", "Sex", "First Name", "Last Name", "E-Mail", "Mobile", "Tel.", "Street", "No.", "PLZ", "City", "Date" }, 0);
 
 		bewerbungTable = new JTable(tableModel);
 		bewerbungTable.getColumnModel().getColumn(0).setPreferredWidth(25);

@@ -82,17 +82,17 @@ public class DB {
 
 	}
 
-	public static void sqlAddBewerbung(String Name, String sex, String firstName, String lastName, String email,
-			String mobile, String tel, String strret, String no, String plz, String stadt, String datum)
+	public static void sqlAddBewerbung(String Name, String postion, String sex, String firstName, String lastName,
+			String email, String mobile, String tel, String strret, String no, String plz, String stadt, String datum)
 			throws SQLException {
 
 		try {
 
 			Connection con1 = connect();
-			String query1 = " insert into Firma (Name, sex, firstName_Emp, lastName_Emp, email, mobile, tel, strasse_Emp, no_Emp, plz_Emp, stadt_Emp, datum)"
-					+ " values ('" + Name + "', '" + sex + "', '" + firstName + "', '" + lastName + "', '" + email
-					+ "', '" + mobile + "', '" + tel + "', '" + strret + "', '" + no + "', '" + plz + "', '" + stadt
-					+ "', '" + datum + "');'";
+			String query1 = " insert into Firma (Name, postion, sex, firstName_Emp, lastName_Emp, email, mobile, tel, strasse_Emp, no_Emp, plz_Emp, stadt_Emp, datum)"
+					+ " values ('" + Name + "', '" + postion + "', '" + sex + "', '" + firstName + "', '" + lastName
+					+ "', '" + email + "', '" + mobile + "', '" + tel + "', '" + strret + "', '" + no + "', '" + plz
+					+ "', '" + stadt + "', '" + datum + "');'";
 			PreparedStatement posted1 = con1.prepareStatement(query1);
 			posted1.execute();
 

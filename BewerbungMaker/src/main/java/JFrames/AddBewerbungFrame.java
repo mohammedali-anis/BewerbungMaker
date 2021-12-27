@@ -46,6 +46,7 @@ public class AddBewerbungFrame extends JFrame {
 	private JTextField plzField;
 	private JTextField cityField;
 	private JTextField dateField;
+	private JTextField postionField;
 
 	/**
 	 * Launch the application.
@@ -86,40 +87,40 @@ public class AddBewerbungFrame extends JFrame {
 		panel.setLayout(null);
 
 		JLabel firstnameLabel = new JLabel("First Name :");
-		firstnameLabel.setBounds(20, 89, 92, 16);
+		firstnameLabel.setBounds(20, 116, 92, 16);
 		panel.add(firstnameLabel);
 
 		JLabel lastnameLabel = new JLabel("Last Name :");
-		lastnameLabel.setBounds(20, 117, 74, 16);
+		lastnameLabel.setBounds(20, 144, 74, 16);
 		panel.add(lastnameLabel);
 
 		JLabel mobileLabel = new JLabel("Mobile :");
-		mobileLabel.setBounds(20, 183, 74, 16);
+		mobileLabel.setBounds(20, 210, 74, 16);
 		panel.add(mobileLabel);
 
 		firstnameField = new JTextField();
-		firstnameField.setBounds(106, 89, 130, 26);
+		firstnameField.setBounds(106, 116, 130, 26);
 		panel.add(firstnameField);
 		firstnameField.setColumns(10);
 
 		lastnameField = new JTextField();
 		lastnameField.setColumns(10);
-		lastnameField.setBounds(106, 117, 130, 26);
+		lastnameField.setBounds(106, 144, 130, 26);
 		panel.add(lastnameField);
 
 		mobileField = new JTextField();
 		mobileField.setColumns(10);
-		mobileField.setBounds(106, 183, 130, 26);
+		mobileField.setBounds(106, 210, 130, 26);
 		panel.add(mobileField);
 
 		addBtn = new JButton("Add");
 //		updateBtn.setIcon(new ImageIcon(EditUserFrame.class.getResource("/code/icons/edit.png")));
-		addBtn.setBounds(42, 362, 117, 29);
+		addBtn.setBounds(42, 389, 117, 29);
 		panel.add(addBtn);
 
 		JButton closeBtn = new JButton("Close");
 //		closeBtn.setIcon(new ImageIcon(EditUserFrame.class.getResource("/code/icons/cancel.png")));
-		closeBtn.setBounds(164, 362, 117, 29);
+		closeBtn.setBounds(164, 389, 117, 29);
 		panel.add(closeBtn);
 
 		closeBtn.addActionListener(l -> {
@@ -128,12 +129,12 @@ public class AddBewerbungFrame extends JFrame {
 		});
 
 		JLabel emailLabel = new JLabel("E-Mail :");
-		emailLabel.setBounds(20, 150, 74, 16);
+		emailLabel.setBounds(20, 177, 74, 16);
 		panel.add(emailLabel);
 
 		emailField = new JTextField();
 		emailField.setColumns(10);
-		emailField.setBounds(106, 150, 130, 26);
+		emailField.setBounds(106, 177, 130, 26);
 		panel.add(emailField);
 
 		DefaultListModel model = new DefaultListModel();
@@ -149,67 +150,76 @@ public class AddBewerbungFrame extends JFrame {
 		panel.add(firmaField);
 
 		JLabel sexLabel = new JLabel("Sex :");
-		sexLabel.setBounds(20, 56, 92, 16);
+		sexLabel.setBounds(20, 83, 92, 16);
 		panel.add(sexLabel);
 
 		sexField = new JTextField();
 		sexField.setColumns(10);
-		sexField.setBounds(106, 56, 130, 26);
+		sexField.setBounds(106, 83, 130, 26);
 		panel.add(sexField);
 
 		JLabel telLabel = new JLabel("Tel. :");
-		telLabel.setBounds(20, 216, 74, 16);
+		telLabel.setBounds(20, 243, 74, 16);
 		panel.add(telLabel);
 
 		telField = new JTextField();
 		telField.setColumns(10);
-		telField.setBounds(106, 216, 130, 26);
+		telField.setBounds(106, 243, 130, 26);
 		panel.add(telField);
 
 		JLabel streetLabel_1 = new JLabel("Street :");
-		streetLabel_1.setBounds(20, 249, 74, 16);
+		streetLabel_1.setBounds(20, 276, 74, 16);
 		panel.add(streetLabel_1);
 
 		streetField = new JTextField();
 		streetField.setColumns(10);
-		streetField.setBounds(106, 249, 130, 26);
+		streetField.setBounds(106, 276, 130, 26);
 		panel.add(streetField);
 
 		JLabel noLabel = new JLabel("No :");
-		noLabel.setBounds(248, 254, 33, 16);
+		noLabel.setBounds(248, 281, 33, 16);
 		panel.add(noLabel);
 
 		noField = new JTextField();
 		noField.setColumns(10);
-		noField.setBounds(285, 249, 47, 26);
+		noField.setBounds(285, 276, 47, 26);
 		panel.add(noField);
 
 		JLabel plzLabel = new JLabel("PLZ :");
-		plzLabel.setBounds(20, 282, 74, 16);
+		plzLabel.setBounds(20, 309, 74, 16);
 		panel.add(plzLabel);
 
 		plzField = new JTextField();
 		plzField.setColumns(10);
-		plzField.setBounds(106, 282, 130, 26);
+		plzField.setBounds(106, 309, 130, 26);
 		panel.add(plzField);
 
 		JLabel cityLabel = new JLabel("City :");
-		cityLabel.setBounds(248, 287, 33, 16);
+		cityLabel.setBounds(248, 314, 33, 16);
 		panel.add(cityLabel);
 
 		cityField = new JTextField();
 		cityField.setColumns(10);
-		cityField.setBounds(285, 282, 47, 26);
+		cityField.setBounds(285, 309, 47, 26);
 		panel.add(cityField);
 
 		JLabel dateLabel = new JLabel("Date :");
-		dateLabel.setBounds(20, 315, 92, 16);
+		dateLabel.setBounds(20, 342, 92, 16);
 		panel.add(dateLabel);
 
 		dateField = new JTextField();
 		dateField.setColumns(10);
-		dateField.setBounds(106, 315, 130, 26);
+		dateField.setBounds(106, 342, 130, 26);
 		panel.add(dateField);
+		
+		JLabel postionLabel = new JLabel("Postion :");
+		postionLabel.setBounds(20, 55, 92, 16);
+		panel.add(postionLabel);
+		
+		postionField = new JTextField();
+		postionField.setColumns(10);
+		postionField.setBounds(106, 55, 130, 26);
+		panel.add(postionField);
 
 //		ArrayList<String> dataList = sqlConnection.sqlGetUserData(user_id, sectionList);
 //		firstnameField.setText(dataList.get(0));
@@ -228,6 +238,7 @@ public class AddBewerbungFrame extends JFrame {
 		addBtn.addActionListener(l -> {
 
 			String Name = firmaField.getText();
+			String position = postionField.getText();
 			String Sex = sexField.getText();
 			String firstName = firstnameField.getText();
 			String lastName = lastnameField.getText();
@@ -243,7 +254,7 @@ public class AddBewerbungFrame extends JFrame {
 			String date = dateField.getText();
 
 			try {
-				DB.sqlAddBewerbung(Name, Sex, firstName, lastName, email, mobile, tel, street, plz, no, city, date);
+				DB.sqlAddBewerbung(Name, position, Sex, firstName, lastName, email, mobile, tel, street, plz, no, city, date);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
