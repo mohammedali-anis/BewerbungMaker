@@ -151,8 +151,8 @@ public class Login extends JFrame {
 			try {
 
 				if (!DB.sqlLogin(emailTextField.getText(), passwordField.getText()).equals("NF")) {
-					
-					AdminFrame aF = new AdminFrame();
+					String user_id=DB.sqlLogin(emailTextField.getText(), passwordField.getText());
+					AdminFrame aF = new AdminFrame(user_id);
 					aF.setVisible(true);
 					dispose();
 				} else

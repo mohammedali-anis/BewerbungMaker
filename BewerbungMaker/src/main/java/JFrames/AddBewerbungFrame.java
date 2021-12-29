@@ -37,7 +37,7 @@ public class AddBewerbungFrame extends JFrame {
 	private static JTextField mobileField;
 	private static JTextField emailField;
 	private static JButton addBtn;
-	private static String user_id;
+	public static String user_id;
 	private JTextField firmaField;
 	private JTextField sexField;
 	private JTextField telField;
@@ -55,7 +55,7 @@ public class AddBewerbungFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddBewerbungFrame frame = new AddBewerbungFrame();
+					AddBewerbungFrame frame = new AddBewerbungFrame(user_id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,9 +69,10 @@ public class AddBewerbungFrame extends JFrame {
 	 * 
 	 * @throws SQLException
 	 */
-	public AddBewerbungFrame() throws SQLException {
+	public AddBewerbungFrame(String user_id) throws SQLException {
+
 		setResizable(false);
-		
+
 		System.err.println(user_id);
 		setTitle("Edit User");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -211,11 +212,11 @@ public class AddBewerbungFrame extends JFrame {
 		dateField.setColumns(10);
 		dateField.setBounds(106, 342, 130, 26);
 		panel.add(dateField);
-		
+
 		JLabel postionLabel = new JLabel("Postion :");
 		postionLabel.setBounds(20, 55, 92, 16);
 		panel.add(postionLabel);
-		
+
 		postionField = new JTextField();
 		postionField.setColumns(10);
 		postionField.setBounds(106, 55, 130, 26);
@@ -254,7 +255,8 @@ public class AddBewerbungFrame extends JFrame {
 			String date = dateField.getText();
 
 			try {
-				DB.sqlAddBewerbung(Name, position, Sex, firstName, lastName, email, mobile, tel, street, plz, no, city, date);
+				DB.sqlAddBewerbung(Name, position, Sex, firstName, lastName, email, mobile, tel, street, plz, no, city,
+						date, user_id);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

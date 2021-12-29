@@ -6,7 +6,12 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +23,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import sql.DB;
 
 public class AdminFrame extends JFrame {
 
@@ -34,9 +41,9 @@ public class AdminFrame extends JFrame {
 	private JLabel welcomeLabel;
 	private JButton editUserBtn;
 	private static String username;
-	private static String user_id;
-	private static String section_id;
-	private static String section_type;
+	public static String bewerbungID;
+	public static String user_id;
+
 	File[] folderArr;
 	String absolutePath;
 	File file;
@@ -46,7 +53,7 @@ public class AdminFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminFrame frame = new AdminFrame();
+					AdminFrame frame = new AdminFrame(user_id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,9 +69,9 @@ public class AdminFrame extends JFrame {
 	 */
 
 	@SuppressWarnings("serial")
-	public AdminFrame() throws SQLException {
-		
-		
+	public AdminFrame(String user_id) throws SQLException {
+		this.user_id = user_id;
+
 		setTitle("Admin Page");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
@@ -75,8 +82,8 @@ public class AdminFrame extends JFrame {
 		 * User table which shows all Users
 		 * 
 		 */
-		DefaultTableModel tableModel = new DefaultTableModel(
-				new String[] { "Bewerbung ID", "Name", "Postion", "Sex", "First Name", "Last Name", "E-Mail", "Mobile", "Tel.", "Street", "No.", "PLZ", "City", "Date" }, 0);
+		DefaultTableModel tableModel = new DefaultTableModel(new String[] { "Bewerbung ID", "Name", "Postion", "Sex",
+				"First Name", "Last Name", "E-Mail", "Mobile", "Tel.", "Street", "No.", "PLZ", "City", "Date" }, 0);
 
 		bewerbungTable = new JTable(tableModel);
 		bewerbungTable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -171,10 +178,9 @@ public class AdminFrame extends JFrame {
 		bewerbungTable.addMouseListener(new MouseAdapter() {
 
 			public void mouseReleased(MouseEvent e) {
-				user_id = bewerbungTable.getValueAt(bewerbungTable.getSelectedRow(), 0).toString();
-				System.out.println(user_id);
-				username = bewerbungTable.getValueAt(bewerbungTable.getSelectedRow(), 3).toString();
-				System.out.println(username);
+				bewerbungID = bewerbungTable.getValueAt(bewerbungTable.getSelectedRow(), 0).toString();
+				System.out.println(bewerbungID);
+
 			}
 		});
 
@@ -228,19 +234,19 @@ public class AdminFrame extends JFrame {
 		 * To get the Section ID when clicking on the Row via MousAdapter
 		 * 
 		 */
-		sectionTable.addMouseListener(new MouseAdapter() {
-
-			public void mouseReleased(MouseEvent e) {
-				section_id = sectionTable.getValueAt(sectionTable.getSelectedRow(), 0).toString();
-				System.out.println(section_id);
-
-				section_type = sectionTable.getValueAt(sectionTable.getSelectedRow(), 1).toString();
-				System.out.println(section_type);
-			}
-		});
+//		sectionTable.addMouseListener(new MouseAdapter() {
+//
+//			public void mouseReleased(MouseEvent e) {
+//				section_id = sectionTable.getValueAt(sectionTable.getSelectedRow(), 0).toString();
+//				System.out.println(section_id);
+//
+//				section_type = sectionTable.getValueAt(sectionTable.getSelectedRow(), 1).toString();
+//				System.out.println(section_type);
+//			}
+//		});
 
 		logoutBtn = new JButton("Logout");
-		
+
 		logoutBtn.setBounds(664, 425, 117, 29);
 
 		/**
@@ -264,10 +270,15 @@ public class AdminFrame extends JFrame {
 		panel.add(welcomeLabel);
 
 		editUserBtn = new JButton("Edit Selected User");
-		
+
 		editUserBtn.setBounds(417, 266, 155, 29);
 		editUserBtn.setVisible(false);
 		panel.add(editUserBtn);
+
+		JButton gnrBTN = new JButton("Generate");
+		gnrBTN.setVisible(false);
+		gnrBTN.setBounds(438, 310, 117, 29);
+		panel.add(gnrBTN);
 
 		bewerbungTable.setVisible(false);
 		scrollPane.setVisible(false);
@@ -284,22 +295,21 @@ public class AdminFrame extends JFrame {
 			deleteUserBtn.setVisible(true);
 			refreshBtn.setVisible(true);
 			editUserBtn.setVisible(true);
+			gnrBTN.setVisible(true);
 
 			sectionScrollPane.setVisible(false);
 			sectionTable.setVisible(false);
-			
 
 			addUserBtn.addActionListener(w -> {
 
 //				register.setVisible(true);
 				try {
-					AddBewerbungFrame addBeFr = new AddBewerbungFrame();
+					AddBewerbungFrame addBeFr = new AddBewerbungFrame(user_id);
 					addBeFr.setVisible(true);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 
 			});
 
@@ -335,7 +345,7 @@ public class AdminFrame extends JFrame {
 
 		deleteUserBtn.addActionListener(w -> {
 //			DeleteUserFrame deleteuser = null;
-			if (user_id != null && !user_id.isEmpty()) {
+			if (bewerbungID != null && !bewerbungID.isEmpty()) {
 //				deleteuser = new DeleteUserFrame(user_id, username);
 //				deleteuser.setVisible(true);
 			} else
@@ -347,7 +357,35 @@ public class AdminFrame extends JFrame {
 		 * ActionListener for exportButton which exports the current state of the DB
 		 * into a csv File by using the dbBackUp.backup
 		 */
-		
+
+		gnrBTN.addActionListener(l -> {
+
+			HashMap<String, String> company;
+			HashMap<String, String> me;
+			String Sex;
+
+			try {
+				company = DB.getInfo(bewerbungID).get(0);
+				me = DB.getInfo(bewerbungID).get(1);
+
+				if (company.get("Sex").equalsIgnoreCase("Male"))
+					Sex = "Herr";
+				else
+					Sex = "Frau";
+
+				API.GoogleDocAPI.run(company.get("City"), company.get("PLZ"), company.get("No"), company.get("Street"),
+						company.get("LastName"), company.get("FirstName"), Sex, me.get("City"), me.get("PLZ"),
+						me.get("No"), me.get("Street"), me.get("LastName"), me.get("FirstName"), me.get("Email"),
+						me.get("Mobile"), me.get("City"), me.get("PLZ"), me.get("No"), me.get("Street"),
+						me.get("LastName"), me.get("FirstName"));
+			} catch (SQLException | GeneralSecurityException | IOException e1) {
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		});
 
 	}
 }
