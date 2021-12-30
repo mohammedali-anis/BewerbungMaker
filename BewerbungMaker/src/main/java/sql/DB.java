@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 import javax.swing.table.DefaultTableModel;
 
+import JFrames.AdminFrame;
+
 public class DB {
 
 	public static Connection connect() {
@@ -59,7 +61,7 @@ public class DB {
 		 * SELECT user_id from User natural join User_Role Where username='username' AND
 		 * password='password'
 		 */
-		String Query = "Select * from Firma;";
+		String Query = "Select * from Firma Natural Join Bewerbung where user_id='" + AdminFrame.user_id + "';";
 		Statement s = DB.connect().createStatement();
 		r = s.executeQuery(Query);
 		while (r.next()) {

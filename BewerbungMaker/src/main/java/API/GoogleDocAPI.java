@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,21 +28,13 @@ import com.google.api.services.docs.v1.Docs;
 import com.google.api.services.docs.v1.DocsScopes;
 import com.google.api.services.docs.v1.model.BatchUpdateDocumentRequest;
 import com.google.api.services.docs.v1.model.BatchUpdateDocumentResponse;
-import com.google.api.services.docs.v1.model.Color;
 import com.google.api.services.docs.v1.model.DeleteContentRangeRequest;
-import com.google.api.services.docs.v1.model.Dimension;
-import com.google.api.services.docs.v1.model.Document;
 import com.google.api.services.docs.v1.model.InsertTextRequest;
-import com.google.api.services.docs.v1.model.Link;
 import com.google.api.services.docs.v1.model.Location;
-import com.google.api.services.docs.v1.model.OptionalColor;
 import com.google.api.services.docs.v1.model.Range;
 import com.google.api.services.docs.v1.model.Request;
-import com.google.api.services.docs.v1.model.RgbColor;
-import com.google.api.services.docs.v1.model.TextStyle;
-import com.google.api.services.docs.v1.model.UpdateTextStyleRequest;
-import com.google.api.services.docs.v1.model.WeightedFontFamily;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 
 /* class to demonstarte use of Docs get documents API */
 public class GoogleDocAPI {
@@ -86,24 +80,20 @@ public class GoogleDocAPI {
 		return credential;
 	}
 
-//	public static void write2(String id, String s1) throws GeneralSecurityException, IOException {
-//		// Build a new authorized API client service.
-//		final NetHttpTransport HTTP_TRANSPORT2 = GoogleNetHttpTransport.newTrustedTransport();
-//		Docs service2 = new Docs.Builder(HTTP_TRANSPORT2, JSON_FACTORY, getCredentials(HTTP_TRANSPORT2))
-//				.setApplicationName(APPLICATION_NAME).build();
-//
-//		List<Request> requests2 = new ArrayList<>();
-//		requests2.add(new Request()
-//				.setInsertText(new InsertTextRequest().setText(s1).setLocation(new Location().setIndex(53))));
-//
-//		BatchUpdateDocumentRequest body2 = new BatchUpdateDocumentRequest().setRequests(requests2);
-//		BatchUpdateDocumentResponse response2 = service2.documents().batchUpdate(id, body2).execute();
-//	}
-//
-//	public static void rep2() throws GeneralSecurityException, IOException {
-//
-//		write2("1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM", "HIIIIIIIIII");
-//	}
+	public static String copyFile(String firmaName) throws GeneralSecurityException, IOException {
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		String copyTitle = firmaName;
+		File copyMetadata = new File().setName(copyTitle);
+
+		File documentCopyFile = service.files().copy("1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM", copyMetadata)
+				.execute();
+
+		return documentCopyFile.getId();
+
+	}
 
 	public static void lastName_AN(String lastName, String docID) throws GeneralSecurityException, IOException {
 
@@ -538,41 +528,6 @@ public class GoogleDocAPI {
 		return false;
 	}
 
-	public static void run(String stadtAN, String plzAN, String noAN, String streetAN, String lastNameAN,
-			String firstNameAN, String sexAN, String smallCity, String smallPLZ, String smallNo, String smallStreet,
-			String smallLastName, String smallFirstName, String MyEmail, String MyMobile, String MyCity, String MyPLZ,
-			String MyNo, String MyStreet, String MyLastName, String MyFirstName)
-			throws GeneralSecurityException, IOException, URISyntaxException {
-		String docID = "1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM";
-
-		MyEmail(MyEmail, docID);
-		MyMobile(MyMobile, docID);
-		MyCity(MyCity, docID);
-		MyPLZ(MyPLZ, docID);
-		MyNo(MyNo, docID);
-		MyStreet(MyStreet, docID);
-		MyLastName(MyLastName, docID);
-		MyFirstName(MyFirstName, docID);
-
-		stadtAN(stadtAN, docID);
-		plzAN(plzAN, docID);
-		noAN(noAN, docID);
-		streetAN(streetAN, docID);
-		lastNameAN(lastNameAN, docID);
-		firstNameAN(firstNameAN, docID);
-		sexAN(sexAN, docID);
-
-		smallCity(smallCity, docID);
-		smallPLZ(smallPLZ, docID);
-		smallNo(smallNo, docID);
-		smallStreet(smallStreet, docID);
-		smallLastName(smallLastName, docID);
-		smallFirstName(smallFirstName, docID);
-
-//		exportPDF(docID);
-
-	}
-
 	public static void MyFirstName(String MyFirstName, String docID) throws GeneralSecurityException, IOException {
 
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -781,8 +736,131 @@ public class GoogleDocAPI {
 
 	}
 
-	public static void main(String[] args) throws IOException, GeneralSecurityException {
-		String docID = "1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM";
+	public static void date(String date, String docID) throws GeneralSecurityException, IOException {
 
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service = new Docs.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests = new ArrayList<>();
+		requests.add(new Request().setDeleteContentRange(
+				new DeleteContentRangeRequest().setRange(new Range().setStartIndex(128).setEndIndex(138))));
+
+		BatchUpdateDocumentRequest body = new BatchUpdateDocumentRequest().setRequests(requests);
+		BatchUpdateDocumentResponse response = service.documents().batchUpdate(docID, body).execute();
+
+		final NetHttpTransport HTTP_TRANSPORT2 = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service2 = new Docs.Builder(HTTP_TRANSPORT2, JSON_FACTORY, getCredentials(HTTP_TRANSPORT2))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests2 = new ArrayList<>();
+		requests2.add(new Request()
+				.setInsertText(new InsertTextRequest().setText(date).setLocation(new Location().setIndex(128))));
+
+		BatchUpdateDocumentRequest body2 = new BatchUpdateDocumentRequest().setRequests(requests2);
+		BatchUpdateDocumentResponse response2 = service2.documents().batchUpdate(docID, body2).execute();
+
+	}
+
+	public static void Postion(String postion, String docID) throws GeneralSecurityException, IOException {
+
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service = new Docs.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests = new ArrayList<>();
+		requests.add(new Request().setDeleteContentRange(
+				new DeleteContentRangeRequest().setRange(new Range().setStartIndex(140).setEndIndex(142))));
+
+		BatchUpdateDocumentRequest body = new BatchUpdateDocumentRequest().setRequests(requests);
+		BatchUpdateDocumentResponse response = service.documents().batchUpdate(docID, body).execute();
+
+		final NetHttpTransport HTTP_TRANSPORT2 = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service2 = new Docs.Builder(HTTP_TRANSPORT2, JSON_FACTORY, getCredentials(HTTP_TRANSPORT2))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests2 = new ArrayList<>();
+		requests2.add(new Request()
+				.setInsertText(new InsertTextRequest().setText(postion).setLocation(new Location().setIndex(140))));
+
+		BatchUpdateDocumentRequest body2 = new BatchUpdateDocumentRequest().setRequests(requests2);
+		BatchUpdateDocumentResponse response2 = service2.documents().batchUpdate(docID, body2).execute();
+
+	}
+	
+	public static void Respect(String respect, String docID) throws GeneralSecurityException, IOException {
+
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service = new Docs.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests = new ArrayList<>();
+		requests.add(new Request().setDeleteContentRange(
+				new DeleteContentRangeRequest().setRange(new Range().setStartIndex(149).setEndIndex(151))));
+
+		BatchUpdateDocumentRequest body = new BatchUpdateDocumentRequest().setRequests(requests);
+		BatchUpdateDocumentResponse response = service.documents().batchUpdate(docID, body).execute();
+
+		final NetHttpTransport HTTP_TRANSPORT2 = GoogleNetHttpTransport.newTrustedTransport();
+		Docs service2 = new Docs.Builder(HTTP_TRANSPORT2, JSON_FACTORY, getCredentials(HTTP_TRANSPORT2))
+				.setApplicationName(APPLICATION_NAME).build();
+
+		List<Request> requests2 = new ArrayList<>();
+		requests2.add(new Request()
+				.setInsertText(new InsertTextRequest().setText(respect).setLocation(new Location().setIndex(149))));
+
+		BatchUpdateDocumentRequest body2 = new BatchUpdateDocumentRequest().setRequests(requests2);
+		BatchUpdateDocumentResponse response2 = service2.documents().batchUpdate(docID, body2).execute();
+
+	}
+
+	public static void run(String anFirma, String stadtAN, String plzAN, String noAN, String streetAN,
+			String lastNameAN, String firstNameAN, String sexAN, String smallCity, String smallPLZ, String smallNo,
+			String smallStreet, String smallLastName, String smallFirstName, String MyEmail, String MyMobile,
+			String MyCity, String MyPLZ, String MyNo, String MyStreet, String MyLastName, String MyFirstName,
+			String date, String Postion, String respect) throws GeneralSecurityException, IOException, URISyntaxException {
+		String docID = API.GoogleDocAPI.copyFile(anFirma);
+//		String docID = "1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM";
+
+		Respect(respect, docID);
+		
+		Postion(Postion, docID);
+		
+		date(date, docID);
+
+		MyEmail(MyEmail, docID);
+		MyMobile(MyMobile, docID);
+		MyCity(MyCity, docID);
+		MyPLZ(MyPLZ, docID);
+		MyNo(MyNo, docID);
+		MyStreet(MyStreet, docID);
+		MyLastName(MyLastName, docID);
+		MyFirstName(MyFirstName, docID);
+
+		stadtAN(stadtAN, docID);
+		plzAN(plzAN, docID);
+		noAN(noAN, docID);
+		streetAN(streetAN, docID);
+		lastNameAN(lastNameAN, docID);
+		firstNameAN(firstNameAN, docID);
+		sexAN(sexAN, docID);
+
+		smallCity(smallCity, docID);
+		smallPLZ(smallPLZ, docID);
+		smallNo(smallNo, docID);
+		smallStreet(smallStreet, docID);
+		smallLastName(smallLastName, docID);
+		smallFirstName(smallFirstName, docID);
+
+		exportPDF(docID);
+
+	}
+
+	public static void main(String[] args) throws IOException, GeneralSecurityException {
+//		copyFile();
+		String docID = "1n2k5aDKTd2V6QW5XTH4swD0iOxETXjSQhE0DDihhKIM";
+		
+		
+		
 	}
 }

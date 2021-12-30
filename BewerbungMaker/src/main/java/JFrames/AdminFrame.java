@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -362,22 +364,32 @@ public class AdminFrame extends JFrame {
 
 			HashMap<String, String> company;
 			HashMap<String, String> me;
-			String Sex;
+			String Sex, respect;
 
 			try {
 				company = DB.getInfo(bewerbungID).get(0);
 				me = DB.getInfo(bewerbungID).get(1);
 
-				if (company.get("Sex").equalsIgnoreCase("Male"))
+				if (company.get("Sex").equalsIgnoreCase("Male")) {
 					Sex = "Herr";
-				else
-					Sex = "Frau";
+					respect = "geehrter Herr " + company.get("LastName");
+				} else {
 
-				API.GoogleDocAPI.run(company.get("City"), company.get("PLZ"), company.get("No"), company.get("Street"),
-						company.get("LastName"), company.get("FirstName"), Sex, me.get("City"), me.get("PLZ"),
-						me.get("No"), me.get("Street"), me.get("LastName"), me.get("FirstName"), me.get("Email"),
-						me.get("Mobile"), me.get("City"), me.get("PLZ"), me.get("No"), me.get("Street"),
-						me.get("LastName"), me.get("FirstName"));
+					Sex = "Frau";
+					respect = "geehrte Frau " + company.get("LastName");
+				}
+
+				LocalDateTime myDateObj = LocalDateTime.now();
+				System.out.println("Before formatting: " + myDateObj);
+				DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+				String date = myDateObj.format(myFormatObj);
+
+				API.GoogleDocAPI.run(company.get("CompanyName"), company.get("City"), company.get("PLZ"),
+						company.get("No"), company.get("Street"), company.get("LastName"), company.get("FirstName"),
+						Sex, me.get("City"), me.get("PLZ"), me.get("No"), me.get("Street"), me.get("LastName"),
+						me.get("FirstName"), me.get("Email"), me.get("Mobile"), me.get("City"), me.get("PLZ"),
+						me.get("No"), me.get("Street"), me.get("LastName"), me.get("FirstName"), date,
+						company.get("Position"), respect);
 			} catch (SQLException | GeneralSecurityException | IOException e1) {
 				e1.printStackTrace();
 			} catch (URISyntaxException e1) {
