@@ -387,8 +387,8 @@ public class AdminFrame extends JFrame {
 				API.GoogleDocAPI.run(company.get("CompanyName"), company.get("City"), company.get("PLZ"),
 						company.get("No"), company.get("Street"), company.get("LastName"), company.get("FirstName"),
 						Sex, me.get("City"), me.get("PLZ"), me.get("No"), me.get("Street"), me.get("LastName"),
-						me.get("FirstName"), me.get("Email"), me.get("Mobile"), me.get("City"), me.get("PLZ"),
-						me.get("No"), me.get("Street"), me.get("LastName"), me.get("FirstName"), date,
+						System.lineSeparator() + me.get("FirstName"), me.get("Email"), me.get("Mobile"), me.get("City"),
+						me.get("PLZ"), me.get("No"), me.get("Street"), me.get("LastName"), me.get("FirstName"), date,
 						company.get("Position"), respect);
 			} catch (SQLException | GeneralSecurityException | IOException e1) {
 				e1.printStackTrace();
